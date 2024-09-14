@@ -1,0 +1,33 @@
+`timescale 1ns / 1ps
+
+module decoder_tb();
+
+	reg[2:0]a;
+	wire[7:0]y;
+	integer i;
+	decoder3_8 dut(.a(a),.y(y));
+	
+task initialize;
+	begin
+		a=3'd0;
+	end
+endtask
+
+task data_in(input[2:0]i);
+	begin
+		a=i;
+	end
+endtask
+
+initial
+	begin
+		initialize;
+		for(i=0;i<8;i=i+1)
+			begin
+				data_in(i);
+				#10;
+			end
+	end
+initial
+$monitor("data=%b,output=%b",a,y);
+endmodule
