@@ -1,0 +1,58 @@
+module tb();
+  reg clk, rst, load, up_down;
+  reg [3:0] data_in;
+  wire [3:0] count;
+
+  up_down uut (
+    .clk(clk),
+    .rst(rst),
+    .load(load),
+    .up_down(up_down),
+    .data_in(data_in),
+    .count(count)
+  );
+
+  parameter cycle = 10;
+
+  always
+    begin
+    
+    clk = 1'b0;
+      #(cycle/2);
+      clk = ~clk;
+      #(cycle/2);
+     
+    end
+
+  task rst_din();
+    begin
+      @(negedge clk)
+        rst = 1'b0;
+      @(negedge clk)
+        rst = 1'b1;
+    end
+  endtask
+
+  task inputs(input l, u,
+  input [3:0] data);
+
+    begin
+      @(negedge clk)
+      load = l;
+      up_down = u;
+      data_in = data;
+    end
+  endtask
+
+  initial
+    begin
+      rst_din();
+      inputs(1'b0,1'b1, 4'b0101);
+      #10;
+      inputs(1'b0, 1'b0, 4'b0110);
+      #10;
+      inputs(1'b1, 1'b1, 4'b1100);
+      #50;
+      $finish;
+    end
+endmodule
