@@ -1,0 +1,27 @@
+module counter(input clk,rst,load,up_down,
+output reg[3:0]count,
+input [3:0]data_in);
+
+always@(posedge clk or posedge rst)
+    begin
+        if(~rst)
+            count<=0;
+            else if(load)
+                count<=data_in;
+                    else
+                        case(up_down)//When up_down == 0, the counter counts down.
+                       0: begin
+                            if(count==2)//If count reaches 2, it is reset to 15
+                                count<=15;
+                                else
+                                    count<=count-1'b1;
+                            end
+                        1:begin//When up_down == 1, the counter counts up.
+                            if(count==15)
+                            count<=2;//If count reaches 15, it is reset to 2 (count <= 2).
+                            else
+                            count<=count+1'b1;
+                          end
+                        endcase
+          end
+ endmodule
