@@ -1,0 +1,27 @@
+`timescale 1ns / 1ps
+
+module tb();
+reg clk,rst,din;
+wire dout;
+
+sequence_generator dut(clk,rst,din,dout);
+
+initial
+  begin
+    clk=1'b0;
+    forever #5 clk=~clk;
+  end
+
+initial 
+  begin
+    din=0;
+    rst=1'b1;
+    @(negedge clk) rst=1'b0;
+    @(negedge clk) din=1'b1;
+    @(negedge clk) din=1'b0;
+    @(negedge clk) din=1'b1;
+    @(negedge clk) din=1'b1;
+    @(negedge clk) din=1'b0;
+    @(negedge clk) din=1'b1;
+  end
+endmodule
