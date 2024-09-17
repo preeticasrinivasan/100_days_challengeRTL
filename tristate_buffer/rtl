@@ -1,0 +1,22 @@
+module tristate_buffer_bufif (
+    input wire A, B, C,    // Inputs
+    output wire F          // Output F = AB + BC + AC
+);
+
+    wire AB, BC, AC;       // Intermediate signals for each product term
+    wire F_AB, F_BC, F_AC; // Tristate buffer outputs
+
+    // Compute the product terms
+    assign AB = A & B;
+    assign BC = B & C;
+    assign AC = A & C;
+
+    // Tristate buffer using bufif1 (drives when enable is 1)
+    bufif1 (F_AB, AB, AB); // Enable is AB
+    bufif1 (F_BC, BC, BC); // Enable is BC
+    bufif1 (F_AC, AC, AC); // Enable is AC
+
+    // Combine the outputs from the tristate buffers
+    assign F = F_AB | F_BC | F_AC;
+
+endmodule
