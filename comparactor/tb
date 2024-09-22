@@ -1,0 +1,32 @@
+`timescale 1ns/1ps
+
+module TwoBitComparator_tb;
+    // Inputs
+    reg [1:0] A;
+    reg [1:0] B;
+
+    // Outputs
+    wire A_greater_B;
+    wire A_equal_B;
+    wire A_less_B;
+
+    // Instantiate the Unit Under Test (UUT)
+    TwoBitComparator uut (
+        .A(A), 
+        .B(B), 
+        .A_greater_B(A_greater_B), 
+        .A_equal_B(A_equal_B), 
+        .A_less_B(A_less_B)
+    );
+
+    initial begin
+        A = 2'b00; B = 2'b00;
+        #10;
+        $display("A = 00, B = 00 --> A > B: %b, A == B: %b, A < B: %b", A_greater_B, A_equal_B, A_less_B);
+        
+        // Test case 2: A = 2'b01, B = 2'b00 (A > B)
+        A = 2'b01; B = 2'b00;
+        #100;
+        $finish;
+    end
+endmodule
