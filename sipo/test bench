@@ -1,0 +1,51 @@
+`timescale 1ns / 1ps
+module sipo_shift_register_tb();
+
+    reg clk_shift;     
+    reg clk;     
+    reg rst;        
+    reg serial_in;     
+    wire [9:0] parallel_out;  
+
+    sipo dut (
+        .clk_shift(clk_shift),
+        .clk(clk),
+        .rst(rst),
+        .serial_in(serial_in),
+        .parallel_out(parallel_out)
+    );
+    initial begin
+        clk_shift = 0;
+        forever #0.5 clk_shift = ~clk_shift;  // 1000 MHz 
+    end
+
+   
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;  // 100 MHz 
+    end
+
+   
+    initial begin
+        
+        rst= 0;
+        serial_in = 0;
+        
+ 
+        #10 rst= 1; 
+      
+        serial_in = 1; #1;
+        serial_in = 0; #1; 
+        serial_in = 1; #1; 
+        serial_in = 0; #1; 
+        serial_in = 1; #1; 
+        serial_in = 0; #1; 
+        serial_in = 1; #1; 
+        serial_in = 0; #1;
+        serial_in = 1; #1; 
+        serial_in = 0; #1; 
+        #100;
+        $finish;
+    end
+
+endmodule
