@@ -1,0 +1,25 @@
+`timescale 1ns / 1ps
+
+
+module sipo (
+    input clk_shift,   
+    input  clk,     
+    input  rst,       
+    input  serial_in,   
+    output reg [9:0] parallel_out  
+);
+
+    reg [9:0] temp;  
+
+    always @(posedge clk_shift) begin
+        if (!rst) begin
+            temp <= 10'b0; 
+        end
+        else begin
+            temp <= { serial_in,temp[9:1]}; 
+        end
+    
+            parallel_out <= temp; 
+    end
+
+endmodule
