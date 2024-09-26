@@ -1,0 +1,26 @@
+`timescale 1ns / 1ps
+module ALU (
+    input [3:0] A,        // 4-bit input A
+    input [3:0] B,        // 4-bit input B
+    input [2:0] ALU_Sel,  // 3-bit ALU operation selector (expanded for more operations)
+    output reg [3:0] ALU_Out, // 4-bit output
+    output reg Carry_Out  // Carry-out flag
+);
+
+always @(*) begin
+    Carry_Out = 1'b0; // Default carry-out value
+    case (ALU_Sel)
+        3'b000: {Carry_Out, ALU_Out} = A + B;  // Addition
+        3'b001: {Carry_Out, ALU_Out} = A - B;  // Subtraction
+        3'b010: ALU_Out = A & B;    // AND operation
+        3'b011: ALU_Out = A | B;    // OR operation
+        3'b100: ALU_Out = A ^ B;    // XOR operation
+        3'b101: ALU_Out = ~(A | B); // NOR operation
+        3'b110: ALU_Out = ~(A & B); // NAND operation
+        3'b111: ALU_Out = A << 1;   // Left shift (logical shift left by 1 bit)
+        default: ALU_Out = 4'b0000; // Default case (output 0)
+    endcase
+end
+
+endmodule
+
