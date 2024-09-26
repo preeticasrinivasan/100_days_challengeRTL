@@ -1,0 +1,54 @@
+`timescale 1ns / 1ps
+
+module ALU_tb;
+
+    reg [3:0] A;            // Test input A
+    reg [3:0] B;            // Test input B
+    reg [2:0] ALU_Sel;      // Test ALU operation selector
+    wire [3:0] ALU_Out;     // Test output ALU result
+    wire Carry_Out;         // Test output carry flag
+
+    // Instantiate the ALU module
+    ALU uut (
+        .A(A),
+        .B(B),
+        .ALU_Sel(ALU_Sel),
+        .ALU_Out(ALU_Out),
+        .Carry_Out(Carry_Out)
+    );
+
+    initial begin
+        // Monitor the changes
+        $monitor("A = %b, B = %b, ALU_Sel = %b, ALU_Out = %b, Carry_Out = %b", 
+                  A, B, ALU_Sel, ALU_Out, Carry_Out);
+        
+        // Test 1: Addition (A + B)
+        A = 4'b0011; B = 4'b0101; ALU_Sel = 3'b000; #10; // Expected: ALU_Out = 8, Carry_Out = 0
+        
+        // Test 2: Subtraction (A - B)
+        A = 4'b1001; B = 4'b0010; ALU_Sel = 3'b001; #10; // Expected: ALU_Out = 7, Carry_Out = 0
+        
+        // Test 3: AND (A & B)
+        A = 4'b1100; B = 4'b1010; ALU_Sel = 3'b010; #10; // Expected: ALU_Out = 1000
+        
+        // Test 4: OR (A | B)
+        A = 4'b1100; B = 4'b1010; ALU_Sel = 3'b011; #10; // Expected: ALU_Out = 1110
+        
+        // Test 5: XOR (A ^ B)
+        A = 4'b1100; B = 4'b1010; ALU_Sel = 3'b100; #10; // Expected: ALU_Out = 0110
+        
+        // Test 6: NOR (~(A | B))
+        A = 4'b1100; B = 4'b1010; ALU_Sel = 3'b101; #10; // Expected: ALU_Out = 0001
+        
+        // Test 7: NAND (~(A & B))
+        A = 4'b1100; B = 4'b1010; ALU_Sel = 3'b110; #10; // Expected: ALU_Out = 0111
+        
+        // Test 8: Left Shift (A << 1)
+        A = 4'b1011; ALU_Sel = 3'b111; #10;             // Expected: ALU_Out = 0110 (left shift)
+
+        // Finish the simulation
+        $finish;
+    end
+
+endmodule
+
