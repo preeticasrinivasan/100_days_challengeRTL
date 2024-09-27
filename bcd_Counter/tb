@@ -1,0 +1,37 @@
+module testbench;
+
+    reg clk;
+    reg rst;
+    wire [3:0] q;
+
+    // Instantiate the BCD counter
+    bcd_counter uut (
+        .clk(clk),
+        .rst(rst),
+        .q(q)
+    );
+
+    // Clock generation
+    always #5 clk = ~clk;  // Clock with a period of 10 time units
+
+    initial begin
+        // Initialize inputs
+        clk = 0;
+        rst = 1;
+
+        // Apply reset for some time
+        #10 rst = 0;
+
+        // Let the counter run for a few clock cycles
+        #100;
+
+        // End simulation
+        $finish;
+    end
+
+    // Monitor the outputs
+    initial begin
+        $monitor("Time: %0d | q: %d", $time, q);
+    end
+
+endmodule
