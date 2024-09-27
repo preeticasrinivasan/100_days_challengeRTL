@@ -1,0 +1,20 @@
+module bcd_counter (
+    input wire clk,        // Clock input
+    input wire rst,        // Reset input
+    output reg [3:0] q     // 4-bit BCD output (represents 0 to 9)
+);
+
+// Always block triggered on the rising edge of the clock or the reset signal
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        q <= 4'b0000;  // Reset the counter to 0 when rst is high
+    end else begin
+        if (q == 4'b1001) begin
+            q <= 4'b0000;  // If the counter reaches 9 (1001), reset it to 0
+        end else begin
+            q <= q + 1;    // Otherwise, increment the counter
+        end
+    end
+end
+
+endmodule
