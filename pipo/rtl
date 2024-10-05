@@ -1,0 +1,16 @@
+module pipo (
+    input [3:0] d,    // 4-bit input data
+    input clk,        // clock signal
+    input rst,        // reset signal
+    output reg [3:0] q // 4-bit output data
+);
+
+// On clock edge or reset
+always @(posedge clk or posedge rst) begin
+    if (rst)
+        q <= 4'b0000; // Reset the output to 0 when reset is active
+    else
+        q <= d;       // Load input data into output on clock's rising edge
+end
+
+endmodule
