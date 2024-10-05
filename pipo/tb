@@ -1,0 +1,48 @@
+module tb_pipo;
+
+// Declare variables for inputs and outputs of the PIPO
+reg [3:0] d;     // 4-bit input data
+reg clk;         // clock signal
+reg rst;         // reset signal
+wire [3:0] q;    // 4-bit output data
+
+// Instantiate the PIPO module
+pipo uut (
+    .d(d),
+    .clk(clk),
+    .rst(rst),
+    .q(q)
+);
+
+// Clock generation (period = 10 units)
+always #5 clk = ~clk;
+
+initial begin
+    // Initialize signals
+    clk = 0;
+    rst = 0;
+    d = 4'b0000;
+    
+    // Apply reset
+    #5 rst = 1;    // Reset active
+    #10 rst = 0;   // Deassert reset
+    
+    // Test Case 1: Apply input 4'b1010
+    #10 d = 4'b1010;
+    
+    // Test Case 2: Apply input 4'b1100
+    #10 d = 4'b1100;
+    
+    // Test Case 3: Apply input 4'b1111
+    #10 d = 4'b1111;
+    
+    // End simulation
+    #20 $finish;
+end
+
+// Monitor the signals
+initial begin
+    $monitor("Time=%0t | d=%b | rst=%b | q=%b", $time, d, rst, q);
+end
+
+endmodule
