@@ -1,0 +1,42 @@
+`timescale 1ns/1ps
+
+module tb_pos_edge_detector;
+
+    // Inputs to the DUT (Device Under Test)
+    reg clk;
+    reg signal_in;
+
+    // Output from the DUT
+    wire edge_detected;
+
+    // Instantiate the DUT (positive edge detector)
+    pos_edge_detector uut (
+        .clk(clk),
+        .signal_in(signal_in),
+        .edge_detected(edge_detected)
+    );
+
+    // Clock generation: 10ns period (100MHz)
+    always #5 clk = ~clk;
+
+    initial begin
+        // Initialize signals
+        clk = 0;
+        signal_in = 0;
+
+        // Apply test stimulus
+        #10 signal_in = 1;  // Rising edge at 10ns
+        #10 signal_in = 0;  // Falling edge at 20ns
+        #20 signal_in = 1;  // Rising edge at 40ns
+        #30 signal_in = 0;  // Falling edge at 70ns
+
+        // Finish the simulation after a short time
+        #50 $stop;
+    end
+
+    // Monitor the output for debugging
+    initial begin
+        $monitor("Time = %0t, signal_in = %b, edge_detected = %b", $time, signal_in, edge_detected);
+    end
+
+endmodule
